@@ -18,7 +18,7 @@ export default withTRPC<AppRouter>({
      */
     const url = process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}/api/trpc`
-      : "http://whostheroundest.vercel.app/api/trpc";
+      : "https://whostheroundest.vercel.app/api/trpc";
 
     return {
       url,
