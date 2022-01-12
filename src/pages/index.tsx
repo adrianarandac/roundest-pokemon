@@ -27,7 +27,7 @@ const Home: NextPage = () => {
       <div className="border rounded p-8 flex justify-between max-w-2xl items-center">
         <div className="transition ease-in-out delay-150 w-40 h-40 bg-green-200 rounded-full hover:bg-violet-400 flex flex-col items-center">
           <img
-            src={firstPokemon.data?.sprites.front_default}
+            src={firstPokemon.data?.sprites.front_default!}
             alt="pokemon"
             className="w-full"
           />
@@ -36,7 +36,7 @@ const Home: NextPage = () => {
         <div className="p-8">VS</div>
         <div className="transition ease-in-out delay-150 w-40 h-40 bg-green-200 rounded-full hover:bg-violet-400 flex flex-col items-center">
           <img
-            src={secondPokemon.data?.sprites.front_default}
+            src={secondPokemon.data?.sprites.front_default!}
             alt="pokemon"
             className="w-full"
           />
