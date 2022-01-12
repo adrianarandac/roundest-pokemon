@@ -13,7 +13,12 @@ const Home: NextPage = () => {
   const firstPokemon = trpc.useQuery(["get-pokemon-by-id", { id: first }]);
   const secondPokemon = trpc.useQuery(["get-pokemon-by-id", { id: second }]);
 
-  if (firstPokemon.isLoading || secondPokemon.isLoading) return null;
+  if (firstPokemon.isLoading || secondPokemon.isLoading)
+    return (
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        LOADING...
+      </div>
+    );
 
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
