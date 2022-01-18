@@ -2,8 +2,9 @@
 import type { NextPage } from "next";
 import { trpc } from "@/utils/trpc";
 import { getOptionsForVote } from "@/utils/getRandomPokemon";
-import { useState } from "react";
-import Image from "next/image";
+import React, { useState } from "react";
+import { type } from "os";
+import { inferQueryResponse } from "./api/trpc/[trpc]";
 
 const Home: NextPage = () => {
   const [ids, setIds] = useState(() => getOptionsForVote());
@@ -13,18 +14,9 @@ const Home: NextPage = () => {
   const firstPokemon = trpc.useQuery(["get-pokemon-by-id", { id: first }]);
   const secondPokemon = trpc.useQuery(["get-pokemon-by-id", { id: second }]);
 
-  if (firstPokemon.isLoading || secondPokemon.isLoading)
-    return (
-      <img
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20"
-        src="https://i.stack.imgur.com/kOnzy.gif"
-        alt=""
-      />
-    );
-
   const voteForRoundest = (selected?: number) => {
     // todo: fire muttion to persist changes
-    setIds(getOptionsForVote())
+    setIds(getOptionsForVote());
   };
 
   return (
@@ -34,29 +26,42 @@ const Home: NextPage = () => {
       </div>
       <div className="p-2" />
       <div className="border rounded p-8 flex justify-between max-w-2xl items-center">
-        <div className="w-48 flex flex-col items-center">
-          <img
-            src={firstPokemon.data?.sprites.front_default!}
-            alt="pokemon"
-            className="w-full"
-          />
-          <div className="capitalize">{firstPokemon.data?.name}</div>
-          <button className="voteButton" onClick={() => voteForRoundest()}>Rounder</button>
-        </div>
-        <div className="p-8">VS</div>
-        <div className="w-48 flex flex-col items-center">
-          <img
-            src={secondPokemon.data?.sprites.front_default!}
-            alt="pokemon"
-            className="w-full"
-          />
-          <div className="capitalize">{secondPokemon.data?.name}</div>
-          
-          <button className="voteButton" onClick={() => voteForRoundest()}>Rounder</button>
-
-        </div>
+        {!firstPokemon.isLoading && !secondPokemon.isLoading && (
+          <>
+            <PokemonListing
+              pokemon={firstPokemon.data!}
+              vote={() => voteForRoundest(first)}
+            />
+            <div className="p-8">VS</div>
+            <PokemonListing
+              pokemon={secondPokemon.data!}
+              vote={() => voteForRoundest(second)}
+            />
+          </>
+        )}
       </div>
-      <div className="mb-3"></div>
+      <div className="p-2"></div>
+    </div>
+  );
+};
+
+type PokemonFromServer = inferQueryResponse<"get-pokemon-by-id">;
+
+const PokemonListing: React.FC<{
+  pokemon: PokemonFromServer;
+  vote: () => void;
+}> = (props) => {
+  return (
+    <div className="flex flex-col items-center">
+      <img
+        src={props.pokemon.sprites.front_default!}
+        alt="pokemon"
+        className="w-56"
+      />
+      <div className="capitalize">{props.pokemon.name}</div>
+      <button className="voteButton" onClick={() => props.vote()}>
+        Rounder
+      </button>
     </div>
   );
 };

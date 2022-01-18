@@ -13,5 +13,5 @@ export const getOptionsForVote = () => {
   const firstId = getRandomPokemon();
   const secondId = getRandomPokemon(firstId);
 
-  return [firstId, secondId]
+  return [firstId, secondId];
 };
