@@ -24,7 +24,7 @@ const Home: NextPage = () => {
 
   const voteForRoundest = (selected: number) => {
     // todo: fire muttion to persist changes
-    updateIds(getOptionsForVote())
+    setIds(getOptionsForVote())
   };
 
   return (
@@ -41,7 +41,7 @@ const Home: NextPage = () => {
             className="w-full"
           />
           <div className="capitalize">{firstPokemon.data?.name}</div>
-          <button className="voteButton" onClick={() => voteForRoundest(firstPokemon)}>Rounder</button>
+          <button className="voteButton" onClick={() => voteForRoundest()}>Rounder</button>
         </div>
         <div className="p-8">VS</div>
         <div className="w-48 flex flex-col items-center">
@@ -52,7 +52,7 @@ const Home: NextPage = () => {
           />
           <div className="capitalize">{secondPokemon.data?.name}</div>
           
-          <button className="voteButton" onClick={() => voteForRoundest(secondPokemon)}>Rounder</button>
+          <button className="voteButton" onClick={() => voteForRoundest()}>Rounder</button>
 
         </div>
       </div>
