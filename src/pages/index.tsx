@@ -22,7 +22,7 @@ const Home: NextPage = () => {
       />
     );
 
-  const voteForRoundest = (selected: number) => {
+  const voteForRoundest = (selected?: number) => {
     // todo: fire muttion to persist changes
     setIds(getOptionsForVote())
   };
