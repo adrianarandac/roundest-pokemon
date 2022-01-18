@@ -2,8 +2,8 @@
 import type { NextPage } from "next";
 import { trpc } from "@/utils/trpc";
 import { getOptionsForVote } from "@/utils/getRandomPokemon";
-import React, { useState } from "react";
-import { type } from "os";
+import { useState } from "react";
+import type React from "react";
 import { inferQueryResponse } from "./api/trpc/[trpc]";
 
 const Home: NextPage = () => {
@@ -14,8 +14,17 @@ const Home: NextPage = () => {
   const firstPokemon = trpc.useQuery(["get-pokemon-by-id", { id: first }]);
   const secondPokemon = trpc.useQuery(["get-pokemon-by-id", { id: second }]);
 
-  const voteForRoundest = (selected?: number) => {
-    // todo: fire muttion to persist changes
+  const voteMutation = trpc.useMutation(["cast-vote"]);
+
+  const voteForRoundest = (selected: number) => {
+    if (selected === first) {
+      console.log(first);
+      voteMutation.mutate({ votedFor: first, votedAgainst: second });
+    } else {
+      console.log(second);
+      voteMutation.mutate({ votedFor: second, votedAgainst: first });
+    }
+
     setIds(getOptionsForVote());
   };
 
@@ -29,12 +38,12 @@ const Home: NextPage = () => {
         {!firstPokemon.isLoading && !secondPokemon.isLoading && (
           <>
             <PokemonListing
-              pokemon={firstPokemon.data!}
+              pokemon={firstPokemon.data}
               vote={() => voteForRoundest(first)}
             />
             <div className="p-8">VS</div>
             <PokemonListing
-              pokemon={secondPokemon.data!}
+              pokemon={secondPokemon.data}
               vote={() => voteForRoundest(second)}
             />
           </>
